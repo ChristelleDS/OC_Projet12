@@ -26,9 +26,16 @@ class CustomUserManager(UserManager):
 
 class User(AbstractUser):
 
+    TEAM = [('SALES', 'SALES'),
+            ('SUPPORT', 'SUPPORT'),
+            ('MANAGEMENT', 'MANAGEMENT'),
+            ('CONSULT', 'CONSULT')]
+
     # Disable username field and enable login via email
     username = None
     email = models.EmailField(unique=True)
+    team = models.fields.CharField(max_length=10, choices=TEAM,
+                                   blank=False, default='CONSULT')
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
