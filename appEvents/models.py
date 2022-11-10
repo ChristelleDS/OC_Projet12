@@ -1,4 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 
 class Client(models.Model):
@@ -17,14 +21,16 @@ class Client(models.Model):
     qualification = models.fields.CharField(max_length=10,
                                             choices=QUALIFICATION,
                                             default='PROSPECT')
-    # salescontact =
+    salescontact = models.ForeignKey(User, related_name='clients',
+                                     on_delete=models.SET_NULL, null=True)
 
 
 class Contract(models.Model):
     id = models.BigAutoField(primary_key=True)
     client = models.ForeignKey(Client, related_name='contracts',
                                on_delete=models.CASCADE, blank=False)
-    # salescontact
+    salescontact = models.ForeignKey(User, related_name='contracts',
+                                     on_delete=models.SET_NULL, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False)
@@ -43,7 +49,8 @@ class Event(models.Model):
                                  on_delete=models.CASCADE, blank=False)
     client = models.ForeignKey(Client, related_name='events',
                                on_delete=models.CASCADE, blank=False)
-    # supportcontact
+    supportcontact = models.ForeignKey(User, related_name='events',
+                                       on_delete=models.SET_NULL, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     event_status = models.ForeignKey(Status, related_name='events',
