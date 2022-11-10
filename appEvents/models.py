@@ -15,7 +15,7 @@ class Client(models.Model):
     email = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     mobile = models.CharField(max_length=20, blank=True)
-    company_name = models.CharField(max_length=250, blank=True)
+    company_name = models.CharField(max_length=250)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     qualification = models.fields.CharField(max_length=10,
@@ -23,6 +23,9 @@ class Client(models.Model):
                                             default='PROSPECT')
     salescontact = models.ForeignKey(User, related_name='clients',
                                      on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.company_name + " ( " + str(self.id) +" )"
 
 
 class Contract(models.Model):
@@ -37,10 +40,15 @@ class Contract(models.Model):
     amount = models.FloatField(default=0)
     payment_due = models.DateTimeField(blank=True)
 
+    def __str__(self):
+        return str(self.client) + " (contract: " + str(self.id) + " )"
 
 class Status(models.Model):
     id = models.BigAutoField(primary_key=True)
     status_label = models.CharField(max_length=18)
+
+    def __str__(self):
+        return self.status_label
 
 
 class Event(models.Model):
@@ -58,3 +66,6 @@ class Event(models.Model):
     attendees = models.IntegerField(default=1)
     event_date = models.DateTimeField(blank=True)
     notes = models.TextField()
+
+    def __str__(self):
+        return str(self.client) + " (event: " + str(self.id) + " )"
