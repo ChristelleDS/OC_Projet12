@@ -28,16 +28,15 @@ class User(AbstractUser):
 
     TEAM = [('SALES', 'SALES'),
             ('SUPPORT', 'SUPPORT'),
-            ('MANAGEMENT', 'MANAGEMENT'),
-            ('CONSULT', 'CONSULT')]
+            ('MANAGEMENT', 'MANAGEMENT')]
 
     # Disable username field and enable login via email
     username = None
     email = models.EmailField(unique=True)
     team = models.fields.CharField(max_length=10, choices=TEAM,
-                                   blank=False, default='CONSULT')
+                                   blank=False)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['team']
 
     # Make a new member active & staff by default, so it can do CRUD operations
     # is_active = models.BooleanField(default=True)
