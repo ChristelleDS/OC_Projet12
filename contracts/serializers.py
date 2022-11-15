@@ -13,7 +13,7 @@ class ContractListSerializer(ModelSerializer):
         fields = ['id', 'client', 'salescontact', 'status']
 
 
-class ContractDetailSerializer(ModelSerializer):
+class ContractSerializer(ModelSerializer):
 
     class Meta:
         model = Contract

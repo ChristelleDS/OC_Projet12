@@ -1,6 +1,5 @@
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer
 from .models import Client
-from epicEvents.contracts.serializers import ContractListSerializer
 from django.contrib.auth import get_user_model
 
 
@@ -14,7 +13,7 @@ class ClientListSerializer(ModelSerializer):
         fields = ['id', 'firstname', 'lastname', 'company_name', 'qualification', 'salescontact']
 
 
-class ClientDetailSerializer(ModelSerializer):
+class ClientSerializer(ModelSerializer):
 
     class Meta:
         model = Client

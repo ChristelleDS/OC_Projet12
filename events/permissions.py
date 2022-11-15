@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from epicEvents.clients.models import Client
+from clients.models import Client
 
 
 read_methods = ["GET"]
