@@ -14,7 +14,7 @@ class Contract(models.Model):
                                      on_delete=models.SET_NULL, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default=False) # signé ou non
     amount = models.FloatField(default=0)
     payment_due = models.DateTimeField(blank=True)
 

@@ -1,6 +1,7 @@
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from .models import Contract
 from clients.models import Client
 from .serializers import ContractListSerializer, ContractSerializer
@@ -70,3 +71,13 @@ class ContractViewset(ModelViewSet):
         self.check_object_permissions(self.request, contract)
         contract.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['PUT'])
+    def sign(self, request, pk):
+        # Signer le contrat
+        contract = get_object_or_404(Contract, pk=pk)
+        self.check_object_permissions(self.request, contract)
+        contract.status = True
+        contract.save()
+        # Retournons enfin une réponse (status_code=200 par défaut) pour indiquer le succès de l'action
+        return Response()
