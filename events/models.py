@@ -22,7 +22,8 @@ class Event(models.Model):
     client = models.ForeignKey(Client, related_name='events',
                                on_delete=models.CASCADE, blank=False)
     supportcontact = models.ForeignKey(User, related_name='events',
-                                       on_delete=models.SET_NULL, null=True)
+                                       on_delete=models.SET_NULL, null=True,
+                                       limit_choices_to={"team": 'SUPPORT'})
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     event_status = models.ForeignKey(Status, related_name='events',
