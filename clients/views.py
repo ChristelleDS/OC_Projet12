@@ -1,3 +1,4 @@
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.shortcuts import render
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
@@ -14,18 +15,16 @@ User = get_user_model()
 
 
 class ClientViewset(ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated & ClientPermission]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
     serializer_class = ClientListSerializer
     detail_serializer_class = ClientSerializer
-    permission_classes = [permissions.IsAuthenticated & ClientPermission]
 
     def get_queryset(self):
-        """
-        :return: list of clients which the user is allowed to access
-        """
         return Client.objects.all()
 
     def perform_create(self, serializer):
-        client = serializer.save(salescontact=self.request.user)
+        client = serializer.save()
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         client = get_object_or_404(Client, pk=pk)
