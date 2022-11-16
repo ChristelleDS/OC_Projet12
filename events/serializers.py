@@ -18,3 +18,9 @@ class EventSerializer(ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+
+    def validate_supportcontact(self, value: id(User)) -> int:
+        contact = User.objects.filter(id=value)
+        if contact.team != 'SUPPORT':
+            raise ValidationError("This user is not a support member")
+        return value

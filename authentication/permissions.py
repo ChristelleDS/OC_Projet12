@@ -3,14 +3,16 @@ from .models import User
 
 
 read_methods = ["GET"]
-edit_methods = ("PUT", "PATCH", "DELETE")
 
 
 class UserPermission(permissions.BasePermission):
     message = "Permission denied. Only an admin can create or edit a user."
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated
+        if request.user.team in ('MANAGEMENT') \
+                and request.user.is_authenticated:
+            return True
+        return False
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
@@ -19,7 +21,4 @@ class UserPermission(permissions.BasePermission):
             return True
         elif request.method in read_methods:
             return True
-        # elif request.method in edit_methods \
-        #        and request.user.team in ('MANAGEMENT'):
-        #    return True
         return False
