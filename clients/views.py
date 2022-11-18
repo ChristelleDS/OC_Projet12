@@ -28,8 +28,9 @@ class ClientViewset(ModelViewSet):
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         client = get_object_or_404(Client, pk=pk)
+        print(client)
         self.check_object_permissions(self.request, client)
-        serializer = ClientSerializer(Client)
+        serializer = ClientSerializer(client)
         return Response(serializer.data)
 
     def update(self, request, pk=None, *args, **kwargs):
