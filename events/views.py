@@ -44,7 +44,7 @@ class EventViewset(ModelViewSet):
         - if project and issue don't match: error "unknown data" is raised
         - if match : return detailed data if permissions ok
         """
-        contract = get_object_or_404(Contract, contract_pk=contract_pk)
+        contract = get_object_or_404(Contract, pk=contract_pk)
         event = get_object_or_404(Event, pk=pk)
         if event.contract.id == contract.id:
             self.check_object_permissions(self.request, event)
