@@ -12,14 +12,6 @@ class CustomUserManager(UserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password=None, team=None, **extra_fields):
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, team, **extra_fields)
-
-    def create_superuser(self, email, password=None, team='MANAGEMENT', **extra_fields):
-        extra_fields.setdefault('is_superuser', True)
-        return self._create_user(email, password, team='MANAGEMENT', **extra_fields)
-
 
 class User(AbstractUser):
 
@@ -43,6 +35,11 @@ class User(AbstractUser):
     objects = CustomUserManager()
 
     def save(self, *args, **kwargs):
+        # update is_superuser flag
+        if self.team == 'MANAGEMENT':
+            self.is_superuser = True
+        else:
+            self.is_superuser = False
         super().save(*args, **kwargs)
         # add the user in the permissions group
         group = Group.objects.get(name=self.team)
