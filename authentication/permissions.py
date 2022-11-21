@@ -4,7 +4,6 @@ from .models import User
 
 read_methods = ["GET"]
 
-
 class UserPermission(permissions.BasePermission):
     message = "Permission denied. Only an admin can create or edit a user."
 

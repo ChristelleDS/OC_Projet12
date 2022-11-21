@@ -28,7 +28,8 @@ event_router.register(r'events', EventViewset, basename='events')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
+    # path('user-token/', obtain_auth_token, name="user-token"),
+    # path('api-auth/', include('rest_framework.urls')),
     path('api/createUser/', CreateUserAPIView.as_view(), name='createUser'),
     path(r'api/', include(client_router.urls)),
     path(r'api/', include(contract_router.urls)),

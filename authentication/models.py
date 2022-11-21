@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.db import models
 from django.contrib.auth.hashers import make_password
 
@@ -41,3 +41,9 @@ class User(AbstractUser):
     is_staff = models.BooleanField(default=True)
 
     objects = CustomUserManager()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # add the user in the permissions group
+        group = Group.objects.get(name=self.team)
+        group.user_set.add(self)

@@ -15,8 +15,11 @@ User = get_user_model()
 
 
 class ClientViewset(ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated & ClientPermission]
+    #  = [permissions.IsAuthenticated & ClientPermission]
+    permission_classes = [ClientPermission]
     authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # authentication_classes = [TokenAuthentication]
+    # http_method_names = ['get', 'post', 'put', 'delete']
     serializer_class = ClientListSerializer
     detail_serializer_class = ClientSerializer
 
