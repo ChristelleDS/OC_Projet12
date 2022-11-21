@@ -13,10 +13,5 @@ class UserAdmin(admin.ModelAdmin):
                            'last_login', 'date_joined',
                            'is_active', 'team')}),
     )
-    add_fieldsets = (
-        (None, {
-            'fields': ('team'),
-        }),
-    )
 
 admin.site.register(User, UserAdmin)

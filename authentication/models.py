@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser, UserManager, Group
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.hashers import make_password
 
@@ -12,6 +13,10 @@ class CustomUserManager(UserManager):
         user.save(using=self._db)
         return user
 
+    def validate_password(self, value: str) -> str:
+        if value is not None:
+            return make_password(value)
+        raise ValidationError("Password is empty")
 
 class User(AbstractUser):
 
