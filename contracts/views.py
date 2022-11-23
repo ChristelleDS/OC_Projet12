@@ -29,14 +29,10 @@ class ContractViewset(ModelViewSet):
         return Contract.objects.filter(client_id=self.kwargs['client_pk'])
 
     def perform_create(self, serializer):
-        """
-        Add actions to execute during the saving of the instance:
-        - save the request.user as the author and default assignee
-        """
         client = get_object_or_404(Client, pk=self.kwargs['client_pk'])
         self.check_object_permissions(self.request, client)
-        contract = serializer.save(salescontact=self.request.user,
-                                   client=self.kwargs['client_pk'])
+        contract = serializer.save(client=client,
+                                   salescontact=self.request.user)
 
     def retrieve(self, request, client_pk=None, pk=None, *args, **kwargs):
         """
@@ -79,5 +75,10 @@ class ContractViewset(ModelViewSet):
         self.check_object_permissions(self.request, contract)
         contract.status = True
         contract.save()
-        # Retournons enfin une réponse (status_code=200 par défaut) pour indiquer le succès de l'action
+        # update the client qualification
+        client = get_object_or_404(Client, pk=contract.client.id)
+        client.QUALIFICATION = 'CLIENT'
+        client.save()
+        # return a success response (status_code=200 as default)
         return Response()
+

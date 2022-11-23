@@ -9,7 +9,7 @@ User = get_user_model()
 class Contract(models.Model):
     id = models.BigAutoField(primary_key=True)
     client = models.ForeignKey(Client, related_name='contracts',
-                               on_delete=models.CASCADE, blank=False)
+                               on_delete=models.CASCADE, blank=True)
     salescontact = models.ForeignKey(User, related_name='contracts',
                                      on_delete=models.SET_NULL, null=True,
                                      limit_choices_to={"team": 'SALES'})
@@ -17,7 +17,7 @@ class Contract(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     status = models.BooleanField(default=False) # signé ou non
     amount = models.FloatField(default=0)
-    payment_due = models.DateTimeField(blank=True)
+    payment_due = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return str(self.client) + " (contract: " + str(self.id) + " )"

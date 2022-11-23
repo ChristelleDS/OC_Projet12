@@ -7,7 +7,7 @@ edit_methods = ("PUT", "PATCH", "DELETE")
 
 class ContractPermission(permissions.BasePermission):
 
-    message = "Permission denied. Only salescontact can edit contract data."
+    message = "Permission denied. Only salescontact and admin can edit contract data."
 
     def has_permission(self, request, view):
         return request.user.is_authenticated

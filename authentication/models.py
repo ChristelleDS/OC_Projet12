@@ -13,10 +13,12 @@ class CustomUserManager(UserManager):
         user.save(using=self._db)
         return user
 
-    def validate_password(self, value: str) -> str:
-        if value is not None:
-            return make_password(value)
-        raise ValidationError("Password is empty")
+    def create_user(self, email, password=None, team=None, **extra_fields):
+        return self._create_user(email, password, team, **extra_fields)
+
+    def create_superuser(self, email, password=None, team='MANAGEMENT', **extra_fields):
+        return self._create_user(email, password, team='MANAGEMENT', **extra_fields)
+
 
 class User(AbstractUser):
 
@@ -38,6 +40,11 @@ class User(AbstractUser):
     is_staff = models.BooleanField(default=True)
 
     objects = CustomUserManager()
+
+    def validate_password(self, value: str) -> str:
+        if value is not None:
+            return make_password(value)
+        raise ValidationError("Password is empty")
 
     def save(self, *args, **kwargs):
         # update is_superuser flag

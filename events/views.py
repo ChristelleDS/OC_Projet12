@@ -54,7 +54,7 @@ class EventViewset(ModelViewSet):
             return Response('Unknown data requested', status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, contract_pk=None, pk=None, *args, **kwargs):
-        contract = get_object_or_404(Contract, contract_pk=contract_pk)
+        contract = get_object_or_404(Contract, pk=contract_pk)
         event = get_object_or_404(Event, pk=pk)
         if event.contract.id == contract.id:
             self.check_object_permissions(self.request, event)
