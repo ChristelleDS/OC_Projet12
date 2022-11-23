@@ -68,6 +68,7 @@ class ContractViewset(ModelViewSet):
         contract.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+"""
     @action(detail=True, methods=['PUT'])
     def sign(self, request, pk):
         # Signer le contrat
@@ -81,4 +82,4 @@ class ContractViewset(ModelViewSet):
         client.save()
         # return a success response (status_code=200 as default)
         return Response()
-
+"""

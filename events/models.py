@@ -1,10 +1,7 @@
 from django.db import models
 from clients.models import Client
 from contracts.models import Contract
-from django.contrib.auth import get_user_model
-
-
-User = get_user_model()
+from authentication.models import User
 
 
 class Status(models.Model):
@@ -17,10 +14,10 @@ class Status(models.Model):
 
 class Event(models.Model):
     id = models.BigAutoField(primary_key=True)
-    contract = models.ForeignKey(Contract, related_name='events',
-                                 on_delete=models.CASCADE, blank=False)
+    contract = models.OneToOneField(to=Contract, related_name='events',
+                                    on_delete=models.CASCADE, null=True)  # limit_choices_to={"status": True}
     client = models.ForeignKey(Client, related_name='events',
-                               on_delete=models.CASCADE, blank=False)
+                               on_delete=models.CASCADE, blank=True)
     supportcontact = models.ForeignKey(User, related_name='events',
                                        on_delete=models.SET_NULL, null=True,
                                        limit_choices_to={"team": 'SUPPORT'})
@@ -29,8 +26,8 @@ class Event(models.Model):
     event_status = models.ForeignKey(Status, related_name='events',
                                      on_delete=models.SET_NULL, null=True)
     attendees = models.IntegerField(default=1)
-    event_date = models.DateTimeField(blank=True)
-    notes = models.TextField(blank=True)
+    event_date = models.DateTimeField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.client) + " (event: " + str(self.id) + " )"

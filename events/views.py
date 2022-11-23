@@ -29,14 +29,13 @@ class EventViewset(ModelViewSet):
         return Event.objects.filter(contract_id=self.kwargs['contract_pk'])
 
     def perform_create(self, serializer):
-        """
-        Add actions to execute during the saving of the instance:
-        - save the request.user as the author and default assignee
-        """
         contract = get_object_or_404(Contract, pk=self.kwargs['contract_pk'])
+        print(contract.client)
+        client = get_object_or_404(Client, pk=contract.client)
+        print(client)
         self.check_object_permissions(self.request, contract)
-        event = serializer.save(client=self.kwargs['client_pk'],
-                                contract=self.kwargs['contract_id'])
+        event = serializer.save(client=client,
+                                contract=contract)
 
     def retrieve(self, request, contract_pk=None, pk=None, *args, **kwargs):
         """
