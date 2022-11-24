@@ -6,15 +6,12 @@ from django.contrib.auth.hashers import make_password
 
 class CustomUserManager(UserManager):
 
-    def _create_user(self, email, password, team, **extra_fields):
+    def create_user(self, email, password=None, team='SUPPORT', **extra_fields):
         email = self.normalize_email(email)
         user = User(email=email, team=team, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
-
-    def create_user(self, email, password=None, team=None, **extra_fields):
-        return self._create_user(email, password, team, **extra_fields)
 
     def create_superuser(self, email, password=None, team='MANAGEMENT', **extra_fields):
         return self._create_user(email, password, team='MANAGEMENT', **extra_fields)
