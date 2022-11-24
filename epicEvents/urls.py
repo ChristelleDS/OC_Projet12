@@ -54,3 +54,5 @@ urlpatterns = [
         name='password_reset_complete',
     ),
 ]
+
+admin.site.site_header = 'Epic Events Administration'

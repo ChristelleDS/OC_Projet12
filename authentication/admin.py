@@ -4,6 +4,7 @@ from django import forms
 from django.forms import PasswordInput, ModelForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.admin.models import LogEntry
+from django.contrib.auth.admin import UserAdmin
 
 """
 class UserChangeForm(forms.ModelForm):
@@ -23,10 +24,10 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 """
 
-@admin.register(User)
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
     # form = UserChangeForm
     # add_form = CustomUserForm
+    username = None
     list_display = ('email', 'team')
     search_fields = ('email', 'last_name')
     ordering = ('email',)
@@ -38,6 +39,11 @@ class CustomUserAdmin(admin.ModelAdmin):
                            'is_active', 'team')}),
     )
     readonly_fields = ('last_login', 'date_joined',)
+    exclude = ("username",)
+    # self.exclude.append('username')
+
+admin.site.register(User, CustomUserAdmin)
+
 
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
