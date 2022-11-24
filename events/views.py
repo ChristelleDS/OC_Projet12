@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
@@ -26,10 +27,12 @@ class EventViewset(ModelViewSet):
 
     def perform_create(self, serializer):
         contract = get_object_or_404(Contract, pk=self.kwargs['contract_pk'])
-        client = get_object_or_404(Client, pk=contract.client.id)
+        if Event.objects.filter(contract=contract.id).exists():
+            raise ValidationError("This contract already have an associated event.")
         self.check_object_permissions(self.request, contract)
+        client = get_object_or_404(Client, pk=contract.client.id)
         event = serializer.save(client=client, contract=contract)
-        # prévoir erreur explicite si event existe déjà pour ce contrat
+
 
     def retrieve(self, request, contract_pk=None, pk=None, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
