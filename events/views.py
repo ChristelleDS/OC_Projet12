@@ -26,9 +26,10 @@ class EventViewset(ModelViewSet):
 
     def perform_create(self, serializer):
         contract = get_object_or_404(Contract, pk=self.kwargs['contract_pk'])
-        client = get_object_or_404(Client, pk=contract.client)
+        client = get_object_or_404(Client, pk=contract.client.id)
         self.check_object_permissions(self.request, contract)
         event = serializer.save(client=client, contract=contract)
+        # prévoir erreur explicite si event existe déjà pour ce contrat
 
     def retrieve(self, request, contract_pk=None, pk=None, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
