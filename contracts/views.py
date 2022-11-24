@@ -9,9 +9,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 from .permissions import ContractPermission
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
-from .filter import ContractFilter
 
 
 User = get_user_model()
@@ -21,9 +18,6 @@ class ContractViewset(ModelViewSet):
     serializer_class = ContractListSerializer
     detail_serializer_class = ContractSerializer
     permission_classes = [permissions.IsAuthenticated & ContractPermission]
-    filter_backends = [SearchFilter, DjangoFilterBackend]
-    filterset_class = ContractFilter
-    search_fields = ["client__lastname", "salescontact", "status"]
 
     def get_queryset(self):
         client = get_object_or_404(Client, pk=self.kwargs['client_pk'])
