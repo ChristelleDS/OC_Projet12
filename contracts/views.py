@@ -20,10 +20,6 @@ class ContractViewset(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated & ContractPermission]
 
     def get_queryset(self):
-        """
-        Only a contributor of the project can get the list of issues.
-        :return: list of issues for the project in param
-        """
         client = get_object_or_404(Client, pk=self.kwargs['client_pk'])
         self.check_object_permissions(self.request, client)
         return Contract.objects.filter(client_id=self.kwargs['client_pk'])
@@ -35,11 +31,6 @@ class ContractViewset(ModelViewSet):
                                    salescontact=self.request.user)
 
     def retrieve(self, request, client_pk=None, pk=None, *args, **kwargs):
-        """
-        Check requested data:
-        - if project and issue don't match: error "unknown data" is raised
-        - if match : return detailed data if permissions ok
-        """
         contract = get_object_or_404(Contract, pk=pk)
         client = get_object_or_404(Client, pk=client_pk)
         if contract.client.id == client.id:
@@ -67,19 +58,3 @@ class ContractViewset(ModelViewSet):
         self.check_object_permissions(self.request, contract)
         contract.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-"""
-    @action(detail=True, methods=['PUT'])
-    def sign(self, request, pk):
-        # Signer le contrat
-        contract = get_object_or_404(Contract, pk=pk)
-        self.check_object_permissions(self.request, contract)
-        contract.status = True
-        contract.save()
-        # update the client qualification
-        client = get_object_or_404(Client, pk=contract.client.id)
-        client.QUALIFICATION = 'CLIENT'
-        client.save()
-        # return a success response (status_code=200 as default)
-        return Response()
-"""

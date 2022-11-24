@@ -20,31 +20,22 @@ class EventViewset(ModelViewSet):
     permission_classes = [permissions.IsAuthenticated & EventPermission]
 
     def get_queryset(self):
-        """
-        Only a contributor of the project can get the list of issues.
-        :return: list of issues for the project in param
-        """
-        contract = get_object_or_404(Client, pk=self.kwargs['contract_pk'])
+        contract = get_object_or_404(Contract, pk=self.kwargs['contract_pk'])
         self.check_object_permissions(self.request, contract)
         return Event.objects.filter(contract_id=self.kwargs['contract_pk'])
 
     def perform_create(self, serializer):
         contract = get_object_or_404(Contract, pk=self.kwargs['contract_pk'])
-        print(contract.client)
         client = get_object_or_404(Client, pk=contract.client)
-        print(client)
         self.check_object_permissions(self.request, contract)
         event = serializer.save(client=client,
                                 contract=contract)
 
     def retrieve(self, request, contract_pk=None, pk=None, *args, **kwargs):
-        """
-        Check requested data:
-        - if project and issue don't match: error "unknown data" is raised
-        - if match : return detailed data if permissions ok
-        """
-        contract = get_object_or_404(Contract, pk=contract_pk)
         event = get_object_or_404(Event, pk=pk)
+        print(event)
+        contract = get_object_or_404(Contract, pk=contract_pk)
+        print(contract)
         if event.contract.id == contract.id:
             self.check_object_permissions(self.request, event)
             serializer = EventSerializer(event)
