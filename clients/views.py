@@ -1,5 +1,8 @@
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from .filter import ClientFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
@@ -19,6 +22,9 @@ class ClientViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     serializer_class = ClientListSerializer
     detail_serializer_class = ClientSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    filterset_class = ClientFilter
+    search_fields = ["firstname", "lastname", "email", "company", "qualification"]
 
     def get_queryset(self):
         return Client.objects.all()

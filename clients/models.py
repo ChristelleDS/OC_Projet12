@@ -15,7 +15,7 @@ class Client(models.Model):
     email = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     mobile = models.CharField(max_length=20, blank=True)
-    company_name = models.CharField(max_length=250)
+    company = models.CharField(max_length=250)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     qualification = models.fields.CharField(max_length=10,
@@ -25,4 +25,4 @@ class Client(models.Model):
                                      on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return self.company_name + " ( " + str(self.id) + " )"
+        return self.company + " ( " + str(self.id) + " )"

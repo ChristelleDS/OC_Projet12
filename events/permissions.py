@@ -21,5 +21,5 @@ class EventPermission(permissions.BasePermission):
         elif request.method in edit_methods and request.user.team == "SUPPORT":
             return obj.supportcontact == request.user
         elif request.method in edit_methods and request.user.team =='SALES':
-            return obj.contract.salescontact == request.user
+            return obj.contract_salescontact == request.user
         return False

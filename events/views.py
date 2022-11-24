@@ -28,14 +28,11 @@ class EventViewset(ModelViewSet):
         contract = get_object_or_404(Contract, pk=self.kwargs['contract_pk'])
         client = get_object_or_404(Client, pk=contract.client)
         self.check_object_permissions(self.request, contract)
-        event = serializer.save(client=client,
-                                contract=contract)
+        event = serializer.save(client=client, contract=contract)
 
     def retrieve(self, request, contract_pk=None, pk=None, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
-        print(event)
         contract = get_object_or_404(Contract, pk=contract_pk)
-        print(contract)
         if event.contract.id == contract.id:
             self.check_object_permissions(self.request, event)
             serializer = EventSerializer(event)
@@ -44,11 +41,11 @@ class EventViewset(ModelViewSet):
             return Response('Unknown data requested', status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, contract_pk=None, pk=None, *args, **kwargs):
-        contract = get_object_or_404(Contract, pk=contract_pk)
         event = get_object_or_404(Event, pk=pk)
+        contract = get_object_or_404(Contract, pk=contract_pk)
         if event.contract.id == contract.id:
             self.check_object_permissions(self.request, event)
-            serializer = EventSerializer(contract, data=request.data)
+            serializer = EventSerializer(event, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
