@@ -12,7 +12,7 @@ https://documenter.getpostman.com/view/23302006/2s8YsxuAyr
 
 Commencez tout d'abord par installer Python.  
 Lancez ensuite la console, placez vous dans le dossier de votre choix puis clonez ce repository:
-
+```
 git clone https://github.com/ChristelleDS/OC_Projet12
 ```
 Se placer dans le dossier téléchargé, puis créer un nouvel environnement virtuel:
