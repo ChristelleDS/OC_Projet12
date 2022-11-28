@@ -52,3 +52,19 @@ Vous pouvez ensuite créer un compte utilisateur via http://localhost:8000/api/c
 ou depuis l'administration du site : http://localhost:8000/admin/
 Vous pouvez ensuite utiliser l'applicaton via les différents endpoints décrits dans la documentation. 
 
+## ADMINISTRATION
+
+L'interface d'administration du site permet à un administrateur d'accéder aux fonctionnalités suivantes:
+- administration des utilisateurs et de leurs droits
+- consultation et édition des données du modèle (client, contrats, évènement etc)
+- consultation des logs
+
+Un utilisateur non administrateur accède :
+- en lecture aux données du modèle 
+- en écriture qu'aux données pour lesquelles il est référent.
+
+Plusieurs groupes d'authorisations ont été implémentées:
+- MANAGEMENT : droits d'administrateur
+- SALES 
+- SUPPORT 
+
