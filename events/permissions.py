@@ -1,5 +1,4 @@
 from rest_framework import permissions
-from clients.models import Client
 
 
 read_methods = ["GET"]
@@ -19,9 +18,11 @@ class EventPermission(permissions.BasePermission):
             return True
         if request.user.team == 'MANAGEMENT':
             return True
+        # check contract signature before creating a event
+        if request.method == 'POST' and request.user.team == "SALES":
+            return obj.status and obj.salescontact == request.user
         elif request.method in edit_methods and request.user.team == "SUPPORT":
             return obj.supportcontact == request.user
         elif request.method in edit_methods and request.user.team == 'SALES':
-            print(obj.contract.salescontact)
             return obj.contract.salescontact == request.user
         return False
