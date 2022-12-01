@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Event, Status
+from .models import Event
 from clients.models import Client
 from contracts.models import Contract
 from .serializers import EventListSerializer, EventSerializer
@@ -29,12 +29,14 @@ class EventViewset(ModelViewSet):
         contract = get_object_or_404(Contract, pk=self.kwargs['contract_pk'])
         if Event.objects.filter(contract=contract.id).exists():
             raise ValidationError("This contract already have an associated event.")
+        if contract.status is False:
+            raise ValidationError("This contract is not signed yet.")
         self.check_object_permissions(self.request, contract)
         client = get_object_or_404(Client, pk=contract.client.id)
         event = serializer.save(client=client, contract=contract)
 
-
-    def retrieve(self, request, contract_pk=None, pk=None, *args, **kwargs):
+    def retrieve(self, request, contract_pk=None, pk=None,
+                 *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
         contract = get_object_or_404(Contract, pk=contract_pk)
         if event.contract.id == contract.id:
@@ -42,9 +44,11 @@ class EventViewset(ModelViewSet):
             serializer = EventSerializer(event)
             return Response(serializer.data)
         else:
-            return Response('Unknown data requested', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Unknown data requested',
+                            status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, contract_pk=None, pk=None, *args, **kwargs):
+    def update(self, request, contract_pk=None, pk=None,
+               *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
         contract = get_object_or_404(Contract, pk=contract_pk)
         if event.contract.id == contract.id:
@@ -53,9 +57,11 @@ class EventViewset(ModelViewSet):
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response('Unknown data requested', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Unknown data requested',
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)

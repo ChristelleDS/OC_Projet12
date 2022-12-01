@@ -5,6 +5,7 @@ from clients.models import Client
 read_methods = ["GET"]
 edit_methods = ["PUT", "PATCH", "DELETE"]
 
+
 class EventPermission(permissions.BasePermission):
 
     message = "Permission denied. Only supportcontact or salescontact can edit event data."
@@ -20,7 +21,7 @@ class EventPermission(permissions.BasePermission):
             return True
         elif request.method in edit_methods and request.user.team == "SUPPORT":
             return obj.supportcontact == request.user
-        elif request.method in edit_methods and request.user.team =='SALES':
+        elif request.method in edit_methods and request.user.team == 'SALES':
             print(obj.contract.salescontact)
             return obj.contract.salescontact == request.user
         return False

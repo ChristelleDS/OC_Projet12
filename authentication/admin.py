@@ -7,7 +7,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
 
-
 class registerUserForm(UserCreationForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
