@@ -15,7 +15,7 @@ class Contract(models.Model):
                                      limit_choices_to={"team": 'SALES'})
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    status = models.BooleanField(default=False) # signé ou non
+    status = models.BooleanField(default=False, verbose_name='signature') # signé ou non
     amount = models.FloatField(default=0)
     payment_due = models.DateTimeField(blank=True, null=True)
 
