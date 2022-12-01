@@ -42,6 +42,21 @@ Lancer le serveur:
 python manage.py runserver
 ```
 
+## Configuration de la base de données PostGreSQL
+
+Dans le fichier "setting.py" du projet Django, mettre à jour le paramétrage de la base de données:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '<project_name>',
+        'USER': '<user_name>',
+        'PASSWORD': '<password>',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
 ## Créer un compte
 
 Pour créer un compte administrateur: 
